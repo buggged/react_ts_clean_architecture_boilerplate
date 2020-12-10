@@ -5,34 +5,29 @@ import { BaseView } from '../../../../core/models/BaseViewModel';
 
 export default class TodoViewModelImpl implements TodoViewModel {
   private baseView?: BaseView;
-  public todos: TodosResultModel[];
-  public loading: boolean;
-  public hasError: boolean;
+  public data: TodosResultModel[];
   public error: string;
+  public status: string;
 
   private todoRepository: TodoRepository;
   public constructor(todoRepository: TodoRepository) {
-    this.todos = [];
-    this.loading = false;
+    this.data = [];
+    this.status = 'idle';
     this.error = '';
-    this.hasError = false;
     this.todoRepository = todoRepository;
   }
 
   public onFetch = async () => {
-    this.loading = true;
-    this.todos = [];
-    this.hasError = false;
+    this.status = 'loading';
+    this.data = [];
     this.notifyViewAboutChanges();
     try {
       const jsonData = await this.todoRepository.onFetch();
-      this.todos = jsonData;
-      this.loading = false;
-      this.hasError = false;
+      this.data = jsonData;
+      this.status = 'data';
       this.notifyViewAboutChanges();
     } catch (err) {
-      console.log(err);
-      this.hasError = true;
+      this.status = 'error';
       this.error = 'Check console please';
       this.notifyViewAboutChanges();
     }

@@ -1,4 +1,4 @@
-The Clear Architecture usign React and Typescript
+The Clear Architecture using React and Typescript
 
 Links to read the article:
 

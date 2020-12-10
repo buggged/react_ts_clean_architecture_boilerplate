@@ -10,9 +10,8 @@ export interface TodoComponentProps {
 
 export interface TodoComponentState {
   data: TodosResultModel[];
+  status: string;
   error: string;
-  hasError: boolean;
-  loading: boolean;
 }
 
 export default class TodoComponent extends React.Component<TodoComponentProps, TodoComponentState>
@@ -26,9 +25,8 @@ export default class TodoComponent extends React.Component<TodoComponentProps, T
     this.todoViewModel = todoViewModel;
 
     this.state = {
-      data: todoViewModel.todos,
-      loading: todoViewModel.loading,
-      hasError: todoViewModel.hasError,
+      data: todoViewModel.data,
+      status: todoViewModel.status,
       error: todoViewModel.error,
     };
   }
@@ -44,37 +42,34 @@ export default class TodoComponent extends React.Component<TodoComponentProps, T
 
   public onViewModelChanged(): void {
     this.setState({
-      data: this.todoViewModel.todos,
-      loading: this.todoViewModel.loading,
-      hasError: this.todoViewModel.hasError,
-      error: this.todoViewModel.error,
+      data: this.todoViewModel.data,
+      status: this.todoViewModel.status,
     });
   }
 
   public render(): JSX.Element {
-    const { data, loading, hasError, error } = this.state;
-    console.log(data);
+    const { data, status, error } = this.state;
     return (
       <div style={{ width: '90%', margin: 'auto' }}>
         <br />
         <br />
         <br />
         <h1>Todo</h1>
-        <p>State: {hasError ? 'error' : loading ? 'loading' : 'data'}</p>
+        <p>State: {status}</p>
         <button onClick={this.todoViewModel.onFetch}>Refresh</button>
         <br />
-        {hasError && (
+        {status === 'error' && (
           <div>
             <h1>Error</h1>
             <p>{JSON.stringify(error)}</p>
           </div>
         )}
-        {loading && (
+        {status === 'loading' && (
           <div>
             <h1>Loading....</h1>
           </div>
         )}
-        {data.length > 0 && (
+        {status === 'data' && data.length > 0 && (
           <div>
             <h1>Data</h1>
             {data.map((item, index) => (

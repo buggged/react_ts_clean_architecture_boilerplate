@@ -2,9 +2,8 @@ import { TodosResultModel } from '../../../data/todo/TodoModels';
 import BaseViewModel from '../../../../core/models/BaseViewModel';
 
 export default interface TodoViewModel extends BaseViewModel {
-  todos: TodosResultModel[];
-  hasError: boolean;
+  data: TodosResultModel[];
   error: string;
-  loading: boolean;
+  status: string;
   onFetch(): void;
 }
